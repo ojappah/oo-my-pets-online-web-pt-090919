@@ -1,6 +1,6 @@
 require "pry"
 
-class Owner	class Owner
+class Owner
   # code goes here	
 end 	  attr_reader :name
 
