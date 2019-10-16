@@ -1,73 +1,94 @@
-	class Owner
- # code goes here
-  attr_accessor :name, :pets
-  attr_reader :species
+require "pry"
 
-  @@owners = []
+class Owner	class Owner
+  # code goes here	
+end 	  attr_reader :name
 
-  def initialize(species, pets = {:fishes => [], :dogs => [], :cats => []})
-    @species = species
-    @pets = pets
-    @@owners << self
+  @@all = [ ]
+
+  @@all_pets = [ ]
+
+  def initialize(name)
+    @name = name 
+    @cats = []
+    @dogs = []
+    @@all << self
+  end
+
+  def self.all
+    @@all
+  end
+
+  def self.count
+    @@all.length 
+  end
+
+  def self.reset_all
+    @@all.clear
+  end
+
+  def species(species = "human")
+    species
   end
 
   def say_species
-    "I am a #{@species}."
+    #binding.pry
+    "I am a #{self.species}."
   end
 
-  def buy_fish(fish_name)
-    @pets[:fishes] << Fish.new(fish_name)
+  def cats
+    Cat.all.select {|item| item.owner == self}
   end
 
-  def buy_cat(cat_name)
-    @pets[:cats] << Cat.new(cat_name)
+  def dogs
+    Dog.all.select {|item| item.owner == self}
   end
 
-  def buy_dog(dog_name)
-    @pets[:dogs] << Dog.new(dog_name)
+  def buy_cat(name)
+    @cats << Cat.new(name, self)
+  end
+
+  def buy_dog(name)
+    @dogs << Dog.new(name, self)
   end
 
   def walk_dogs
-    @pets[:dogs].each do |dog|
-      dog.mood = "happy"
+    self.dogs.each do |item|
+      item.mood = "happy"
     end
   end
 
-  def play_with_cats
-    @pets[:cats].each do |cat|
-      cat.mood = "happy"
-    end
-  end
-
-  def feed_fish
-    @pets[:fishes].each do |fish|
-      fish.mood = "happy"
+  def feed_cats
+    self.cats.each do |item|
+      item.mood = "happy"
     end
   end
 
   def sell_pets
-    @pets.each do |type, name_array|
-      name_array.each do |pet|
-        pet.mood = "nervous"
-        #name_array.delete(pet)
-      end 
+    #binding.pry
+    self.cats.each do |item|
+      item.mood = "nervous"
+      item.owner = nil
     end
-    @pets = {}
+    self.dogs.each do |item|
+      item.mood = "nervous"
+      item.owner = nil
+    end
+    self.cats.clear
+    self.dogs.clear
   end
 
   def list_pets
-    "I have #{@pets[:fishes].length} fish, #{@pets[:dogs].length} dog(s), and #{@pets[:cats].length} cat(s)."
-  end
-
-  def self.all
-    @@owners
-  end
-
-  def self.reset_all
-    @@owners.clear
-  end
-
-  def self. count
-    @@owners.length
+    "I have #{self.dogs.count} dog(s), and #{self.cats.count} cat(s)."
   end
 end
+
+
+
+      #{|item| item.mood == "happy"}
+   # binding.pry
+  #def buy_cat(name = @name)
+    #@cat << Cat.new(name)
+    #binding.pry
+  #end
+#end
